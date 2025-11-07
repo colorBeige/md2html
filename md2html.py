@@ -12,10 +12,60 @@ def convert_headings(text: str) -> str:
     pass
 
 def convert_ordered_list(text: str) -> str:
-    pass
+    # 4. Ordered lists (lines starting with number. and single space)
+    lines = text.split('\n')
+    result = []
+    in_list = False
+    
+    for line in lines:
+        match = re.match(r'^\d+\. (.+)', line)
+        if match:
+            # Start a new list if not already in one and append list item
+            if not in_list:
+                result.append('<ol>')
+                in_list = True
+            text = match.group(1)
+            result.append(f'  <li>{text}</li>')
+        else:
+            # Close list if we were in one, then append the non-list line
+            if in_list:
+                result.append('</ol>')
+                in_list = False
+            result.append(line)
+    
+    # Close the list if it was still open at the end
+    if in_list:
+        result.append('</ol>')
+    
+    return '\n'.join(result)
 
 def convert_unordered_list(text: str) -> str:
-    pass
+    # 4. Unordered lists (lines starting with -, *, or + followed by single space)
+    lines = text.split('\n')
+    result = []
+    in_list = False
+    
+    for line in lines:
+        match = re.match(r'^[-*+] (.+)', line)
+        if match:
+            # Start a new list if not already in one and append list item
+            if not in_list:
+                result.append('<ul>')
+                in_list = True
+            text = match.group(1)
+            result.append(f'  <li>{text}</li>')
+        else:
+            # Close list if we were in one, then append the non-list line
+            if in_list:
+                result.append('</ul>')
+                in_list = False
+            result.append(line)
+    
+    # Close the list if it was still open at the end
+    if in_list:
+        result.append('</ul>')
+    
+    return '\n'.join(result)
 
 def convert_code(text: str) -> str:
     # 5. Code with single or double backticks
@@ -29,8 +79,11 @@ def convert_link(text: str) -> str:
     return text
 
 def convert(text: str) -> str:
+    text = convert_ordered_list(text)
+    text = convert_unordered_list(text)
     text = convert_code(text)
     text = convert_link(text)
+
     return text
 
 def main():
