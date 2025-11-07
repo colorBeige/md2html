@@ -18,6 +18,7 @@ def convert_emphasis(text: str) -> str:
     return text
 
 def convert_paragraph(text: str) -> str:
+    # 2. Paragraphs - blank line that separates text blocks
     lines = text.split('\n')
     result = []
     current_paragraph = []
@@ -176,6 +177,7 @@ def convert(text: str) -> str:
 def main():
     # Check command line arguments
     if len(sys.argv) < 2:
+        print("Usage: python md2html.py <input_file> [output_file]")
         sys.exit(1)
     
     input_file = sys.argv[1]
