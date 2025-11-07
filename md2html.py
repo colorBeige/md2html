@@ -1,3 +1,4 @@
+import re
 import sys
 from pathlib import Path
 
@@ -17,13 +18,16 @@ def convert_unordered_list(text: str) -> str:
     pass
 
 def convert_code(text: str) -> str:
-    pass
+    # 5. Code with single or double backticks
+    text = re.sub(r'`{1,2}(.*?)`{1,2}', r'<code>\1</code>', text)
+    return text
 
 def convert_link(text: str) -> str:
     pass
 
 def convert(text: str) -> str:
-    pass
+    text = convert_code(text)
+    return text
 
 def main():
     # Check command line arguments
