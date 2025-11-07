@@ -18,7 +18,43 @@ def convert_emphasis(text: str) -> str:
     return text
 
 def convert_paragraph(text: str) -> str:
-    pass
+    lines = text.split('\n')
+    result = []
+    current_paragraph = []
+    
+    for line in lines:
+        stripped_line = line.strip()
+        
+        # Ignore lines that are already HTML tags or empty lines
+        is_html_line = (
+            stripped_line.startswith('<h') and stripped_line.endswith('>') or
+            stripped_line.startswith('<ol>') or stripped_line.startswith('</ol>') or
+            stripped_line.startswith('<ul>') or stripped_line.startswith('</ul>') or
+            stripped_line.startswith('<li>') or stripped_line.startswith('</li>') or
+            stripped_line == ''
+        )
+        
+        if is_html_line:
+            # If we hit an HTML line, add line breaks for more than one line
+            # then wrap it in <p> tags and reset
+            if current_paragraph:
+                paragraph_content = '<br>'.join(current_paragraph)
+                result.append(f'<p>{paragraph_content}</p>')
+                current_paragraph = []
+            
+            # Remove unnecsessary empty lines and keep original lines
+            if stripped_line:
+                result.append(line)
+        else:
+            # Text - may have multiple lines - add for future breaks
+            current_paragraph.append(stripped_line)
+    
+    # Finish any remaining paragraph left in the end
+    if current_paragraph:
+        paragraph_content = '<br>'.join(current_paragraph)
+        result.append(f'<p>{paragraph_content}</p>')
+    
+    return '\n'.join(result)
 
 def convert_headings(text: str) -> str:
     # 1. Headings with #, =, and -
@@ -133,6 +169,7 @@ def convert(text: str) -> str:
     text = convert_emphasis(text)
     text = convert_code(text)
     text = convert_link(text)
+    text = convert_paragraph(text)
 
     return text
 
