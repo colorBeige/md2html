@@ -162,7 +162,7 @@ def main():
         print(f"Input file {input_file} not found.")
         sys.exit(1)
 
-        print("Done")
+    print("Done")
 
 if __name__ == "__main__":
     main()
