@@ -3,12 +3,25 @@ import sys
 from pathlib import Path
 
 def convert_emphasis(text: str) -> str:
-    pass
+    #3. Emphasis bold, italics, or both
+
+    # Asterisks can be within words
+    text = re.sub(r'\*\*\*(.*?)\*\*\*', r'<em><strong>\1</strong></em>', text)
+    text = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', text)
+    text = re.sub(r'\*(.*?)\*', r'<em>\1</em>', text)
+
+    # Underscore cannot be within words/characters
+    text = re.sub(r'(?<!\w)___(.*?)___(?!\w)', r'<em><strong>\1</strong></em>', text)
+    text = re.sub(r'(?<!\w)__(.*?)__(?!\w)', r'<strong>\1</strong>', text)
+    text = re.sub(r'(?<!\w)_(.*?)_(?!\w)', r'<em>\1</em>', text)
+
+    return text
 
 def convert_paragraph(text: str) -> str:
     pass
 
 def convert_headings(text: str) -> str:
+    # 1. Headings with #, =, and -
     lines = text.split('\n')
     #print(lines)
     result = []
@@ -114,8 +127,10 @@ def convert_link(text: str) -> str:
     return text
 
 def convert(text: str) -> str:
+    text = convert_headings(text)
     text = convert_ordered_list(text)
     text = convert_unordered_list(text)
+    text = convert_emphasis(text)
     text = convert_code(text)
     text = convert_link(text)
 
