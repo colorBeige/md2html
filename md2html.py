@@ -9,7 +9,42 @@ def convert_paragraph(text: str) -> str:
     pass
 
 def convert_headings(text: str) -> str:
-    pass
+    lines = text.split('\n')
+    #print(lines)
+    result = []
+    i = 0
+    
+    while i < len(lines):
+        line = lines[i]
+        
+        # Check for # headings with a single space
+        match = re.match(r'^(#{1,6}) (.+)', line)
+        if match:
+            level = len(match.group(1))
+            text = match.group(2)
+            result.append(f'<h{level}>{text}</h{level}>')
+            i += 1
+            continue
+        
+        # Check the line after for = (h1) and - (h2)
+        if i + 1 < len(lines):
+            next_line = lines[i + 1]
+            # at least two = for level 1 heading
+            if re.match(r'^={2,}$', next_line):
+                result.append(f'<h1>{line}</h1>')
+                i += 2
+                continue
+            # at least two - for level 2 heading
+            elif re.match(r'^-{2,}$', next_line):
+                result.append(f'<h2>{line}</h2>')
+                i += 2
+                continue
+        
+        # Normal text
+        result.append(line)
+        i += 1
+    
+    return '\n'.join(result)
 
 def convert_ordered_list(text: str) -> str:
     # 4. Ordered lists (lines starting with number. and single space)
