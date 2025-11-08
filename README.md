@@ -6,7 +6,10 @@ Converting markdown to HTML.
 
 Move to the file directory containing the python file.
 
-Usage: `python md2html.py <input.md> [output.html]`
+Usage: 
+```bash
+python md2html.py <input.md> [output.html]
+```
 
 ## Supported Markdown Features
 
