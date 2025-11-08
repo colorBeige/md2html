@@ -11,14 +11,7 @@ Usage:
 python md2html.py <input.md> [output.html]
 ```
 
-## Supported Markdown Features
-
-- **Headings**: `# Header` and `Header\n====` styles (h1-h6)
-- **Emphasis**: `*italic*`, `**bold**`, `***bold italic***` (+ underscore variants)
-- **Lists**: Ordered `1. item` and unordered `- item` / `* item` / `+ item`
-- **Code**: Inline `` `code` `` with backticks
-- **Links**: `[text](url)` format
-- **Paragraphs**: Text blocks with `<br>` line breaks
+input.md is required and output.html is optional.
 
 ## Environment Setup
 
